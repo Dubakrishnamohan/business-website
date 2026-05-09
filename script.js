@@ -171,10 +171,15 @@ function animCount(el, target, suffix = '') {
 }
 
 // Hero card counters — run immediately on load
-animCount(document.getElementById('projCount'), 3);
-animCount(document.getElementById('toolCount'), 8);
-animCount(document.getElementById('molCount'),  4200);
-animCount(document.getElementById('yrCount'),   5);
+const proj = document.getElementById('projCount');
+const tool = document.getElementById('toolCount');
+const mol = document.getElementById('molCount');
+const yr = document.getElementById('yrCount');
+
+if(proj) animCount(proj, 3);
+if(tool) animCount(tool, 8);
+if(mol) animCount(mol, 4200);
+if(yr) animCount(yr, 5);
 
 // Stats strip counters — trigger on scroll into view
 const strip = document.querySelector('.stats-strip');
