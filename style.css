@@ -17,8 +17,7 @@
   --a4:    #ff6b6b;
   --txt:   #ddeeff;
   --muted: #5a7a99;
-  --g1:    linear-gradient(135deg, #00bcd4, #5b21b6, #00c97a);
-
+  --g1:    linear-gradient(135deg, #00e5ff, #7c3aed, #00ffa3);  
 html { scroll-behavior: smooth; }
 
 body {
