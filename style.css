@@ -409,7 +409,7 @@ section { position: relative; z-index: 1; }
   text-align: center;
 }
 
-.stat-n { font-size: 22px; font-weight: 800; color: var(--a1); }
+.stat-num { font-size: 22px; font-weight: 800; color: var(--a1); }
 
 .stat-l {
   font-family: 'Space Mono', monospace;
