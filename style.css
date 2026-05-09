@@ -402,21 +402,18 @@ section { position: relative; z-index: 1; }
   margin-bottom: 24px;
 }
 
-.stat-box {
-  background: rgba(0, 0, 0, .3);
-  border: 1px solid rgba(0, 229, 255, .08);
-  padding: 14px;
-  text-align: center;
+.stat-box{
+  background:rgba(0,0,0,.25);
+  border:1px solid rgba(0,229,255,.08);
+  padding:14px;
+  text-align:center;
 }
 
 .stat-num{
-  display:block !important;
-  opacity:1 !important;
-  visibility:visible !important;
-  color:#00e5ff !important;
-  font-size:38px !important;
-  font-weight:800 !important;
-  line-height:1.2;
+  display:block;
+  color:#00e5ff;
+  font-size:38px;
+  font-weight:800;
   text-align:center;
   text-shadow:0 0 12px rgba(0,229,255,.35);
 }
