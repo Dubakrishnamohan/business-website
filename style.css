@@ -8,7 +8,7 @@
 }
 
 :root {
-  --bg:    #000000;
+  --bg:    #02040b;;
   --s1:    #060d14;
   --s2:    #0a1520;
   --a1:    #00e5ff;
@@ -16,8 +16,8 @@
   --a3:    #00ffa3;
   --a4:    #ff6b6b;
   --txt:   #ddeeff;
-  --muted: #5a7a99;
-  --g1:    linear-gradient(135deg, #00e5ff, #7c3aed, #00ffa3);
+  --muted: #aab4d6; 
+  --g1:    background: linear-gradient(135deg,#00bfff,#7c3aed);
 }
 
 html { scroll-behavior: smooth; }
@@ -227,7 +227,7 @@ section { position: relative; z-index: 1; }
   margin-bottom: 20px;
   opacity: 0;
   animation: up .8s .5s ease forwards;
-  text-shadow:0 0 20px rgba(0,229,255,.15);
+  text-shadow:0 0 8px rgba(0,229,255,.08);
 }
 
 .h-name .grad {
@@ -249,7 +249,7 @@ section { position: relative; z-index: 1; }
 .h-bio {
   font-size: 14px;
   color: var(--muted);
-  line-height: 1.9;
+  line-height: 2;
   margin-bottom: 44px;
   opacity: 0;
   animation: up .8s .85s ease forwards;
