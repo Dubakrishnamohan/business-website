@@ -70,7 +70,7 @@ function drawConnections() {
         ctx.beginPath();
         ctx.moveTo(particles[i].x, particles[i].y);
         ctx.lineTo(particles[j].x, particles[j].y);
-        ctx.strokeStyle = `rgba(0,229,255,${(1 - d / 100) * .06})`;
+        ctx.strokeStyle = `rgba(0,229,255,${(1-d/100)*.025})`;
         ctx.lineWidth   = .5;
         ctx.stroke();
       }
