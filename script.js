@@ -210,3 +210,39 @@ const revealObserver = new IntersectionObserver(entries => {
 }, { threshold: .1 });
 
 document.querySelectorAll('.sk, .pc, .ei').forEach(el => revealObserver.observe(el));
+
+function animateValue(id, end, duration) {
+
+  const obj = document.getElementById(id);
+
+  let start = 0;
+
+  const range = end - start;
+
+  const increment = end > start ? 1 : -1;
+
+  const stepTime = Math.abs(Math.floor(duration / range));
+
+  const timer = setInterval(() => {
+
+    start += increment;
+
+    obj.innerText = start.toLocaleString();
+
+    if (start == end) {
+      clearInterval(timer);
+    }
+
+  }, stepTime);
+
+}
+
+window.onload = function () {
+
+  animateValue("projCount", 3, 1000);
+  animateValue("toolCount", 8, 1000);
+  animateValue("molCount", 4200, 2000);
+  animateValue("yrCount", 5, 1000);
+
+};
+   
