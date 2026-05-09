@@ -409,8 +409,12 @@ section { position: relative; z-index: 1; }
   text-align: center;
 }
 
-.stat-num { font-size: 22px; font-weight: 800; color: var(--a1); }
-
+.stat-num{
+  font-size:32px;
+  font-weight:800;
+  color:#00e5ff;
+  display:block;
+}
 .stat-l {
   font-family: 'Space Mono', monospace;
   font-size: 9px;
