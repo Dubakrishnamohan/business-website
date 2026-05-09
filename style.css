@@ -410,10 +410,15 @@ section { position: relative; z-index: 1; }
 }
 
 .stat-num{
-  font-size:32px;
-  font-weight:800;
-  color:#00e5ff;
-  display:block;
+  display:block !important;
+  opacity:1 !important;
+  visibility:visible !important;
+  color:#00e5ff !important;
+  font-size:38px !important;
+  font-weight:800 !important;
+  line-height:1.2;
+  text-align:center;
+  text-shadow:0 0 12px rgba(0,229,255,.35);
 }
 .stat-l {
   font-family: 'Space Mono', monospace;
