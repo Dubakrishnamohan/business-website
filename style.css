@@ -403,19 +403,20 @@ section { position: relative; z-index: 1; }
 }
 
 .stat-box{
-  background:rgba(0,0,0,.25);
+  background:rgba(0,0,0,.45);
   border:1px solid rgba(0,229,255,.08);
   padding:14px;
   text-align:center;
 }
 
 .stat-num{
-  display:block;
-  color:#00e5ff;
+  color:#00e5ff !important;
   font-size:38px;
   font-weight:800;
-  text-align:center;
-  text-shadow:0 0 12px rgba(0,229,255,.35);
+  opacity:1 !important;
+  display:block !important;
+  visibility:visible !important;
+  text-shadow:0 0 15px rgba(0,229,255,.7);
 }
 .stat-l {
   font-family: 'Space Mono', monospace;
