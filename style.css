@@ -879,3 +879,16 @@ footer p { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--m
   footer { padding: 20px; flex-direction: column; gap: 10px; text-align: center; }
   .scroll-ind { display: none; }
 }
+@media (max-width: 768px){
+
+  .stat-num{
+    display:block !important;
+    opacity:1 !important;
+    visibility:visible !important;
+    color:#00e5ff !important;
+    font-size:42px !important;
+    font-weight:800 !important;
+    text-shadow:0 0 15px rgba(0,229,255,.7);
+  }
+
+}
