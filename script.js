@@ -70,7 +70,7 @@ function drawConnections() {
         ctx.beginPath();
         ctx.moveTo(particles[i].x, particles[i].y);
         ctx.lineTo(particles[j].x, particles[j].y);
-        ctx.strokeStyle = `rgba(0,229,255,${(1-d/100)*.025})`;
+        ctx.strokeStyle = `rgba(0,229,255,${(1 - d / 100) * .06})`;
         ctx.lineWidth   = .5;
         ctx.stroke();
       }
@@ -171,15 +171,10 @@ function animCount(el, target, suffix = '') {
 }
 
 // Hero card counters — run immediately on load
-const proj = document.getElementById('projCount');
-const tool = document.getElementById('toolCount');
-const mol = document.getElementById('molCount');
-const yr = document.getElementById('yrCount');
-
-if(proj) animCount(proj, 3);
-if(tool) animCount(tool, 8);
-if(mol) animCount(mol, 4200);
-if(yr) animCount(yr, 5);
+animCount(document.getElementById('projCount'), 3);
+animCount(document.getElementById('toolCount'), 8);
+animCount(document.getElementById('molCount'),  4200);
+animCount(document.getElementById('yrCount'),   5);
 
 // Stats strip counters — trigger on scroll into view
 const strip = document.querySelector('.stats-strip');
@@ -193,7 +188,7 @@ const stripObserver = new IntersectionObserver(entries => {
       stripObserver.disconnect();
     }
   });
-}, { threshold: .5 });
+}, { threshold: 0, rootMargin: '0px 0px -30px 0px' });
 
 if (strip) stripObserver.observe(strip);
 
@@ -210,34 +205,3 @@ const revealObserver = new IntersectionObserver(entries => {
 }, { threshold: .1 });
 
 document.querySelectorAll('.sk, .pc, .ei').forEach(el => revealObserver.observe(el));
-
-setTimeout(() => {
-
-  function animateValue(id, end) {
-
-    const el = document.getElementById(id);
-
-    if (!el) return;
-
-    let start = 0;
-
-    const timer = setInterval(() => {
-
-      start++;
-
-      el.innerText = start.toLocaleString();
-
-      if (start >= end) {
-        clearInterval(timer);
-      }
-
-    }, 30);
-
-  }
-
-  animateValue("projCount", 3);
-  animateValue("toolCount", 8);
-  animateValue("molCount", 4200);
-  animateValue("yrCount", 5);
-
-}, 1000);
