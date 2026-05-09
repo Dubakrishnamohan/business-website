@@ -211,38 +211,33 @@ const revealObserver = new IntersectionObserver(entries => {
 
 document.querySelectorAll('.sk, .pc, .ei').forEach(el => revealObserver.observe(el));
 
-function animateValue(id, end, duration) {
+setTimeout(() => {
 
-  const obj = document.getElementById(id);
+  function animateValue(id, end) {
 
-  let start = 0;
+    const el = document.getElementById(id);
 
-  const range = end - start;
+    if (!el) return;
 
-  const increment = end > start ? 1 : -1;
+    let start = 0;
 
-  const stepTime = Math.abs(Math.floor(duration / range));
+    const timer = setInterval(() => {
 
-  const timer = setInterval(() => {
+      start++;
 
-    start += increment;
+      el.innerText = start.toLocaleString();
 
-    obj.innerText = start.toLocaleString();
+      if (start >= end) {
+        clearInterval(timer);
+      }
 
-    if (start == end) {
-      clearInterval(timer);
-    }
+    }, 30);
 
-  }, stepTime);
+  }
 
-}
+  animateValue("projCount", 3);
+  animateValue("toolCount", 8);
+  animateValue("molCount", 4200);
+  animateValue("yrCount", 5);
 
-window.onload = function () {
-
-  animateValue("projCount", 3, 1000);
-  animateValue("toolCount", 8, 1000);
-  animateValue("molCount", 4200, 2000);
-  animateValue("yrCount", 5, 1000);
-
-};
-   
+}, 1000);
