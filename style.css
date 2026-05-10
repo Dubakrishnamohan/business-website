@@ -17,7 +17,9 @@
   --a4:    #ff6b6b;
   --txt:   #ddeeff;
   --muted: #5a7a99;
-  --g1:    linear-gradient(135deg, #00e5ff, #7c3aed, #00ffa3);  
+  --g1:    linear-gradient(135deg, #00e5ff, #7c3aed, #00ffa3);
+}
+
 html { scroll-behavior: smooth; }
 
 body {
@@ -862,4 +864,4 @@ footer p { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--m
 
   footer { padding: 20px; flex-direction: column; gap: 10px; text-align: center; }
   .scroll-ind { display: none; }
-} 
+}
