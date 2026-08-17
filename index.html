@@ -423,4 +423,159 @@
   </div>
   <p class="reveal" style="color:var(--muted); max-width:520px; margin:0 auto;">Open to roles and collaborations in cheminformatics, computational chemistry, and AI-assisted drug discovery.</p>
   <div class="contact-links reveal">
-    <a href="mailto:dubamohan720@gmail.com">✉ dubamohan
+    <a href="mailto:dubamohan720@gmail.com">✉ dubamohan720@gmail.com</a>
+    <a href="tel:+919494297886">☎ +91 94942 97886</a>
+    <a href="https://www.linkedin.com/in/duba-krishna-mohan" target="_blank" rel="noopener">in LinkedIn</a>
+    <a href="https://github.com/Dubakrishnamohan" target="_blank" rel="noopener">⌥ GitHub</a>
+  </div>
+</section>
+
+<footer>© 2026 Krishna Mohan Duba · Chodavaram, Andhra Pradesh</footer>
+
+<script>
+  // Reveal on scroll
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, {threshold:0.12});
+  revealEls.forEach(el=>io.observe(el));
+
+  // Periodic table skill tiles
+  const skills = [
+    {sym:'Py', name:'Python', cat:'#5eead4'},
+    {sym:'Rd', name:'RDKit', cat:'#8b7cf6'},
+    {sym:'Md', name:'Molecular Descriptors', cat:'#f5a97f'},
+    {sym:'Sm', name:'SMILES', cat:'#f5a97f'},
+    {sym:'Dl', name:'Drug-likeness', cat:'#f5a97f'},
+    {sym:'Ms', name:'Molecular Similarity', cat:'#f5a97f'},
+    {sym:'Mt', name:'Matplotlib', cat:'#5eead4'},
+    {sym:'Ml', name:'ML Basics', cat:'#f0d264'},
+    {sym:'Qs', name:'QSAR Modeling', cat:'#f0d264'},
+    {sym:'Mp', name:'Molecular Property Prediction', cat:'#f0d264'},
+    {sym:'Gt', name:'Git', cat:'#7fb7f0'},
+    {sym:'Gh', name:'GitHub', cat:'#7fb7f0'},
+    {sym:'Vc', name:'VS Code', cat:'#7fb7f0'},
+    {sym:'Jn', name:'Jupyter Notebook', cat:'#7fb7f0'},
+    {sym:'Cl', name:'Google Colab', cat:'#7fb7f0'},
+    {sym:'Ph', name:'Pharmaceutical Chemistry', cat:'#f08fa2'},
+    {sym:'Da', name:'Drug Analysis', cat:'#f08fa2'},
+    {sym:'Oc', name:'Organic Chemistry', cat:'#f08fa2'},
+  ];
+  const grid = document.getElementById('periodicGrid');
+  skills.forEach((s,i)=>{
+    const tile = document.createElement('div');
+    tile.className = 'tile';
+    tile.style.setProperty('--tile-color', s.cat);
+    tile.innerHTML = `<span class="num">${String(i+1).padStart(2,'0')}</span><span class="sym">${s.sym}</span><span class="name">${s.name}</span>`;
+    grid.appendChild(tile);
+  });
+
+  // Molecule network hero animation
+  const canvas = document.getElementById('molecule-canvas');
+  const ctx = canvas.getContext('2d');
+  let w,h,nodes;
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const mouse = {x:-9999, y:-9999, active:false};
+  const REPEL_RADIUS = 160;
+  const LINK_RADIUS = 150;
+  const CURSOR_LINK_RADIUS = 220;
+
+  function resize(){
+    w = canvas.width = window.innerWidth;
+    h = canvas.height = window.innerHeight;
+  }
+  function initNodes(){
+    const count = Math.max(24, Math.floor((w*h)/38000));
+    nodes = Array.from({length:count}, ()=>({
+      x: Math.random()*w,
+      y: Math.random()*h,
+      vx: (Math.random()-0.5)*0.25,
+      vy: (Math.random()-0.5)*0.25,
+      r: Math.random()*1.6 + 1.4
+    }));
+  }
+  function step(){
+    ctx.clearRect(0,0,w,h);
+
+    nodes.forEach(n=>{
+      // gentle drift
+      n.x += n.vx; n.y += n.vy;
+      if(n.x<0||n.x>w) n.vx*=-1;
+      if(n.y<0||n.y>h) n.vy*=-1;
+
+      // cursor repulsion: nodes glide away as the mouse approaches
+      if(mouse.active){
+        const dx = n.x - mouse.x, dy = n.y - mouse.y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if(dist < REPEL_RADIUS && dist > 0.01){
+          const force = (REPEL_RADIUS - dist) / REPEL_RADIUS;
+          n.x += (dx/dist) * force * 3.2;
+          n.y += (dy/dist) * force * 3.2;
+        }
+      }
+    });
+
+    // node-to-node bonds
+    for(let i=0;i<nodes.length;i++){
+      for(let j=i+1;j<nodes.length;j++){
+        const a=nodes[i], b=nodes[j];
+        const dx=a.x-b.x, dy=a.y-b.y;
+        const dist=Math.sqrt(dx*dx+dy*dy);
+        if(dist<LINK_RADIUS){
+          ctx.strokeStyle = `rgba(94,234,212,${0.16*(1-dist/LINK_RADIUS)})`;
+          ctx.lineWidth=1;
+          ctx.beginPath();
+          ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y);
+          ctx.stroke();
+        }
+      }
+    }
+
+    // bonds from cursor to nearby nodes, cursor glows like an active atom
+    if(mouse.active){
+      nodes.forEach(n=>{
+        const dx = n.x - mouse.x, dy = n.y - mouse.y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if(dist < CURSOR_LINK_RADIUS){
+          ctx.strokeStyle = `rgba(139,124,246,${0.4*(1-dist/CURSOR_LINK_RADIUS)})`;
+          ctx.lineWidth=1.1;
+          ctx.beginPath();
+          ctx.moveTo(mouse.x, mouse.y); ctx.lineTo(n.x, n.y);
+          ctx.stroke();
+        }
+      });
+      const grad = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, 14);
+      grad.addColorStop(0, 'rgba(94,234,212,0.9)');
+      grad.addColorStop(1, 'rgba(94,234,212,0)');
+      ctx.beginPath();
+      ctx.arc(mouse.x, mouse.y, 14, 0, Math.PI*2);
+      ctx.fillStyle = grad;
+      ctx.fill();
+    }
+
+    nodes.forEach(n=>{
+      ctx.beginPath();
+      ctx.arc(n.x,n.y,n.r,0,Math.PI*2);
+      ctx.fillStyle='rgba(139,124,246,0.85)';
+      ctx.fill();
+    });
+    if(!prefersReduced) requestAnimationFrame(step);
+  }
+  resize(); initNodes();
+  if(!prefersReduced) requestAnimationFrame(step); else step();
+  window.addEventListener('resize', ()=>{ resize(); initNodes(); });
+
+  window.addEventListener('mousemove', (e)=>{
+    mouse.x = e.clientX; mouse.y = e.clientY; mouse.active = true;
+  });
+  window.addEventListener('mouseleave', ()=>{ mouse.active = false; });
+  window.addEventListener('touchmove', (e)=>{
+    if(e.touches && e.touches[0]){
+      mouse.x = e.touches[0].clientX; mouse.y = e.touches[0].clientY; mouse.active = true;
+    }
+  }, {passive:true});
+  window.addEventListener('touchend', ()=>{ mouse.active = false; });
+</script>
+
+</body>
+</html>
