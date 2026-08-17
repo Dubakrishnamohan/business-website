@@ -3,234 +3,424 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Krishna Mohan Duba — Data Analyst</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<title>Krishna Mohan Duba — Cheminformatics & Computational Chemistry</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0a0e14;
+    --surface:#111826;
+    --surface-2:#161f30;
+    --line:#243044;
+    --cyan:#5eead4;
+    --violet:#8b7cf6;
+    --amber:#f5a97f;
+    --text:#e7edf5;
+    --muted:#8a97ab;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);
+    color:var(--text);
+    font-family:'Inter', sans-serif;
+    line-height:1.6;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--cyan); color:#0a0e14;}
+
+  .mono{font-family:'JetBrains Mono', monospace;}
+  h1,h2,h3{font-family:'Space Grotesk', sans-serif;}
+
+  a{color:inherit; text-decoration:none;}
+
+  .noise{
+    position:fixed; inset:0; pointer-events:none; z-index:1;
+    background-image:radial-gradient(circle at 20% 20%, rgba(94,234,212,0.05), transparent 40%),
+                      radial-gradient(circle at 80% 70%, rgba(139,124,246,0.06), transparent 45%);
+  }
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:fixed; top:0; left:0; right:0; z-index:100;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:20px 6vw;
+    background:rgba(10,14,20,0.7);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .logo{font-family:'Space Grotesk'; font-weight:700; font-size:1.1rem; letter-spacing:0.5px;}
+  .logo span{color:var(--cyan);}
+  .nav-links{display:flex; gap:2.2rem; font-size:0.85rem;}
+  .nav-links a{color:var(--muted); transition:color .2s; position:relative;}
+  .nav-links a:hover, .nav-links a:focus-visible{color:var(--cyan);}
+  .nav-links a::after{
+    content:''; position:absolute; left:0; bottom:-6px; width:0; height:1px; background:var(--cyan);
+    transition:width .25s;
+  }
+  .nav-links a:hover::after{width:100%;}
+  @media(max-width:720px){.nav-links{display:none;}}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    min-height:100vh;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center;
+    position:relative;
+    padding:120px 6vw 60px;
+  }
+  #molecule-canvas{
+    position:fixed; inset:0; width:100%; height:100%; z-index:0; opacity:0.55; pointer-events:none;
+  }
+  .hero-content{position:relative; z-index:2;}
+  .eyebrow{
+    font-family:'JetBrains Mono'; font-size:0.78rem; color:var(--cyan);
+    letter-spacing:3px; text-transform:uppercase; margin-bottom:22px;
+    opacity:0; animation:fadeUp 0.8s ease forwards 0.1s;
+  }
+  .hero h1{
+    font-size:clamp(2.6rem, 7vw, 5.2rem);
+    font-weight:700;
+    letter-spacing:-2px;
+    line-height:1.02;
+    background:linear-gradient(180deg, #ffffff 0%, #c7d3e0 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+    opacity:0; animation:fadeUp 0.9s ease forwards 0.25s;
+  }
+  .hero .tagline{
+    margin-top:22px; font-size:clamp(1rem,2vw,1.25rem); color:var(--muted);
+    max-width:640px; font-weight:400;
+    opacity:0; animation:fadeUp 0.9s ease forwards 0.45s;
+  }
+  .hero .tagline b{color:var(--text); font-weight:600;}
+  .formula-strip{
+    margin-top:34px; font-family:'JetBrains Mono'; font-size:0.82rem; color:var(--violet);
+    letter-spacing:1px;
+    opacity:0; animation:fadeUp 0.9s ease forwards 0.6s;
+  }
+  .hero-actions{
+    margin-top:38px; display:flex; gap:16px; flex-wrap:wrap; justify-content:center;
+    opacity:0; animation:fadeUp 0.9s ease forwards 0.75s;
+  }
+  .btn{
+    padding:13px 28px; border-radius:2px; font-size:0.85rem; font-weight:600;
+    border:1px solid var(--line); transition:all .25s; font-family:'Inter';
+    letter-spacing:0.3px;
+  }
+  .btn-primary{background:var(--cyan); color:#08131a; border-color:var(--cyan);}
+  .btn-primary:hover{box-shadow:0 0 24px rgba(94,234,212,0.45); transform:translateY(-2px);}
+  .btn-ghost{color:var(--text); background:transparent;}
+  .btn-ghost:hover{border-color:var(--cyan); color:var(--cyan);}
+
+  @keyframes fadeUp{
+    from{opacity:0; transform:translateY(22px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+
+  .scroll-cue{
+    position:absolute; bottom:36px; left:50%; transform:translateX(-50%);
+    font-family:'JetBrains Mono'; font-size:0.7rem; color:var(--muted);
+    display:flex; flex-direction:column; align-items:center; gap:8px;
+    animation:bob 2.2s ease-in-out infinite;
+  }
+  .scroll-cue .line{width:1px; height:28px; background:linear-gradient(var(--cyan), transparent);}
+  @keyframes bob{0%,100%{transform:translate(-50%,0);}50%{transform:translate(-50%,8px);}}
+
+  /* ---------- SECTION SHELL ---------- */
+  section{padding:120px 6vw; position:relative; z-index:2;}
+  .section-head{margin-bottom:60px;}
+  .section-tag{
+    font-family:'JetBrains Mono'; font-size:0.75rem; color:var(--cyan);
+    letter-spacing:2px; text-transform:uppercase; display:flex; align-items:center; gap:12px;
+  }
+  .section-tag::before{content:''; width:24px; height:1px; background:var(--cyan);}
+  .section-head h2{font-size:clamp(1.8rem,4vw,2.6rem); margin-top:14px; letter-spacing:-1px;}
+
+  .reveal{opacity:0; transform:translateY(28px); transition:opacity .7s ease, transform .7s ease;}
+  .reveal.in{opacity:1; transform:translateY(0);}
+
+  /* ---------- ABOUT ---------- */
+  .about-grid{display:grid; grid-template-columns:1.1fr 0.9fr; gap:60px; align-items:start;}
+  @media(max-width:860px){.about-grid{grid-template-columns:1fr;}}
+  .about-text p{color:#c3ccd9; font-size:1.02rem; max-width:60ch;}
+  .about-text p + p{margin-top:16px;}
+  .about-text b{color:var(--cyan); font-weight:600;}
+
+  .stat-panel{
+    background:var(--surface); border:1px solid var(--line); padding:30px;
+    display:flex; flex-direction:column; gap:22px;
+  }
+  .stat-row{display:flex; justify-content:space-between; align-items:baseline; border-bottom:1px dashed var(--line); padding-bottom:14px;}
+  .stat-row:last-child{border-bottom:none; padding-bottom:0;}
+  .stat-row .label{font-family:'JetBrains Mono'; font-size:0.75rem; color:var(--muted); text-transform:uppercase; letter-spacing:1px;}
+  .stat-row .value{font-family:'Space Grotesk'; font-size:1rem; font-weight:600; text-align:right;}
+
+  /* ---------- EDUCATION : reaction pathway ---------- */
+  .pathway{position:relative; padding-left:2px;}
+  .path-item{
+    display:grid; grid-template-columns:120px 1fr; gap:28px;
+    padding:34px 0; border-top:1px solid var(--line); position:relative;
+  }
+  .path-item:last-child{border-bottom:1px solid var(--line);}
+  .path-year{font-family:'JetBrains Mono'; color:var(--violet); font-size:0.85rem; padding-top:4px;}
+  .path-body h3{font-size:1.2rem; margin-bottom:6px;}
+  .path-body .org{color:var(--cyan); font-size:0.9rem; font-family:'JetBrains Mono'; margin-bottom:8px;}
+  .path-body .meta{color:var(--muted); font-size:0.88rem;}
+
+  /* ---------- SKILLS: periodic table ---------- */
+  .periodic-grid{
+    display:grid; grid-template-columns:repeat(auto-fill, minmax(110px,1fr)); gap:12px;
+  }
+  .tile{
+    aspect-ratio:1/1; border:1px solid var(--line); background:var(--surface);
+    padding:10px; display:flex; flex-direction:column; justify-content:space-between;
+    position:relative; cursor:default; transition:transform .25s, box-shadow .25s, border-color .25s;
+  }
+  .tile:hover{transform:translateY(-6px); border-color:var(--tile-color, var(--cyan)); box-shadow:0 10px 30px -12px var(--tile-color, var(--cyan));}
+  .tile .num{font-family:'JetBrains Mono'; font-size:0.62rem; color:var(--muted);}
+  .tile .sym{font-family:'Space Grotesk'; font-size:1.5rem; font-weight:700; color:var(--tile-color, var(--cyan));}
+  .tile .name{font-size:0.62rem; color:var(--muted); line-height:1.2;}
+  .legend{display:flex; flex-wrap:wrap; gap:18px; margin-top:26px;}
+  .legend-item{display:flex; align-items:center; gap:8px; font-family:'JetBrains Mono'; font-size:0.72rem; color:var(--muted);}
+  .legend-dot{width:9px; height:9px; border-radius:50%;}
+
+  /* ---------- RESEARCH INTERESTS ---------- */
+  .interest-list{display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line);}
+  .interest-item{background:var(--bg); padding:26px; display:flex; gap:16px; align-items:flex-start;}
+  .interest-item .bond{font-family:'JetBrains Mono'; color:var(--amber); font-size:0.9rem; padding-top:2px;}
+  .interest-item p{font-size:0.94rem; color:#c3ccd9;}
+
+  /* ---------- PROJECTS ---------- */
+  .project-card{
+    border:1px solid var(--line); background:var(--surface); margin-bottom:24px;
+    padding:34px; position:relative; overflow:hidden;
+  }
+  .project-card::before{
+    content:''; position:absolute; top:0; left:0; width:3px; height:100%;
+    background:linear-gradient(var(--cyan), var(--violet));
+  }
+  .project-top{display:flex; justify-content:space-between; align-items:flex-start; gap:20px; flex-wrap:wrap;}
+  .project-top h3{font-size:1.3rem;}
+  .status{
+    font-family:'JetBrains Mono'; font-size:0.68rem; padding:5px 10px; border:1px solid var(--line);
+    letter-spacing:1px; text-transform:uppercase; white-space:nowrap;
+  }
+  .status.active{color:var(--amber); border-color:var(--amber);}
+  .status.done{color:var(--cyan); border-color:var(--cyan);}
+  .stack-row{display:flex; flex-wrap:wrap; gap:8px; margin:16px 0 18px;}
+  .stack-tag{font-family:'JetBrains Mono'; font-size:0.72rem; color:var(--violet); border:1px solid var(--line); padding:4px 10px;}
+  .project-card ul{list-style:none; display:flex; flex-direction:column; gap:9px;}
+  .project-card li{color:#c3ccd9; font-size:0.93rem; padding-left:20px; position:relative;}
+  .project-card li::before{content:'→'; position:absolute; left:0; color:var(--cyan);}
+  .repo-link{display:inline-flex; align-items:center; gap:8px; margin-top:18px; font-family:'JetBrains Mono'; font-size:0.82rem; color:var(--cyan); border-bottom:1px solid transparent;}
+  .repo-link:hover{border-color:var(--cyan);}
+
+  /* ---------- CERTIFICATIONS ---------- */
+  .cert-list{display:flex; flex-direction:column;}
+  .cert-item{
+    display:grid; grid-template-columns:40px 1fr auto; gap:20px; align-items:center;
+    padding:20px 0; border-top:1px solid var(--line);
+  }
+  .cert-item:last-child{border-bottom:1px solid var(--line);}
+  .cert-item .idx{font-family:'JetBrains Mono'; color:var(--muted); font-size:0.8rem;}
+  .cert-item .cert-name{font-weight:500;}
+  .cert-item .cert-org{color:var(--muted); font-size:0.85rem; margin-top:3px;}
+  .cert-item .cert-year{font-family:'JetBrains Mono'; font-size:0.78rem; color:var(--violet); text-align:right;}
+
+  /* ---------- CONTACT / FOOTER ---------- */
+  .contact-section{text-align:center;}
+  .contact-section h2{font-size:clamp(2rem,5vw,3.2rem);}
+  .contact-links{display:flex; justify-content:center; gap:26px; flex-wrap:wrap; margin-top:38px;}
+  .contact-links a{
+    font-family:'JetBrains Mono'; font-size:0.9rem; color:var(--text); border:1px solid var(--line);
+    padding:14px 24px; display:flex; align-items:center; gap:10px; transition:all .25s;
+  }
+  .contact-links a:hover{border-color:var(--cyan); color:var(--cyan); transform:translateY(-3px);}
+  footer{text-align:center; padding:40px 6vw; color:var(--muted); font-size:0.78rem; font-family:'JetBrains Mono'; border-top:1px solid var(--line);}
+
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none !important; transition:none !important;}
+  }
+</style>
 </head>
 <body>
 
-<!-- BG CANVAS -->
-<canvas id="bgCanvas"></canvas>
+<div class="noise"></div>
 
-<!-- CURSORS -->
-<div class="cur" id="c1"></div>
-<div class="cur" id="c2"></div>
-
-<!-- NAV -->
 <nav>
-  <div class="logo">KMD.portfolio</div>
-  <ul class="nav-links">
-    <li><a href="#skills">Skills</a></li>
-    <li><a href="#projects">Projects</a></li>
-    <li><a href="#education">Education</a></li>
-    <li><a href="#contact">Contact</a></li>
-  </ul>
+  <div class="logo">KM<span>D</span></div>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#education">Education</a>
+    <a href="#skills">Skills</a>
+    <a href="#projects">Projects</a>
+    <a href="#certifications">Certifications</a>
+    <a href="#contact">Contact</a>
+  </div>
 </nav>
 
-<!-- HERO -->
-<section id="hero">
-  <div class="hero-wrap">
-    <div class="hero-left">
-      <div class="h-tag"><span class="h-tag-dot"></span>Open to opportunities</div>
-      <h1 class="h-name glitch" data-text="Krishna Mohan Duba">
-        Krishna<br><span class="grad">Mohan Duba</span>
-      </h1>
-      <p class="h-role">Data Analyst · Cheminformatics · Python Developer</p>
-      <p class="h-bio">Bridging chemistry and data science — turning molecular datasets, raw CSVs, and complex problems into compelling insights using Python, RDKit, Pandas, and Machine Learning.</p>
-      <div class="h-btns">
-        <a href="#projects" class="btn-p"><span>Explore Work</span></a>
-        <a href="#contact" class="btn-o">Hire Me</a>
-      </div>
-    </div>
-
-    <div class="hero-right">
-      <div class="profile-card" id="profileCard">
-        <div class="avatar-ring">
-          <div class="avatar-inner">KM</div>
-        </div>
-        <div class="card-name">Krishna Mohan Duba</div>
-        <div class="card-role">Data Analyst · Chemist</div>
-        <div class="card-stats">
-          <div class="stat-box"><div class="stat-n" id="projCount">0</div><div class="stat-l">Projects</div></div>
-          <div class="stat-box"><div class="stat-n" id="toolCount">0</div><div class="stat-l">Tools</div></div>
-          <div class="stat-box"><div class="stat-n" id="molCount">0</div><div class="stat-l">Molecules</div></div>
-          <div class="stat-box"><div class="stat-n" id="yrCount">0</div><div class="stat-l">Years Study</div></div>
-        </div>
-        <div class="card-tags">
-          <span class="ctag">Python</span><span class="ctag">RDKit</span>
-          <span class="ctag">Pandas</span><span class="ctag">ML</span>
-          <span class="ctag">MySQL</span><span class="ctag">Chemistry</span>
-        </div>
-      </div>
+<header class="hero">
+  <canvas id="molecule-canvas"></canvas>
+  <div class="hero-content">
+    <div class="eyebrow">M.Sc Chemistry · Chodavaram, Andhra Pradesh</div>
+    <h1>Krishna Mohan<br>Duba</h1>
+    <p class="tagline">Building at the intersection of <b>chemistry</b> and <b>code</b> — cheminformatics, computational chemistry, and AI-assisted drug discovery.</p>
+    <div class="formula-strip mono">RDKit · Python · QSAR · Molecular Descriptors · Drug-likeness</div>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="#projects">View Projects</a>
+      <a class="btn btn-ghost" href="#contact">Get in Touch</a>
     </div>
   </div>
-  <div class="scroll-ind"><div class="sline"></div><span>Scroll</span></div>
-</section>
+  <div class="scroll-cue"><span>SCROLL</span><span class="line"></span></div>
+</header>
 
-<!-- STATS STRIP -->
-<div class="stats-strip">
-  <div class="strip-item"><div class="strip-n" data-target="3">0</div><div class="strip-l">Projects Built</div></div>
-  <div class="strip-item"><div class="strip-n" data-target="8">0</div><div class="strip-l">Tools Mastered</div></div>
-  <div class="strip-item"><div class="strip-n" data-target="4200" data-suffix="+">0</div><div class="strip-l">Molecules Analyzed</div></div>
-  <div class="strip-item"><div class="strip-n" data-target="5">0</div><div class="strip-l">Years Academic</div></div>
-</div>
-
-<!-- SKILLS -->
-<section id="skills">
-  <div class="sec-head">
-    <div class="sec-eye">Technical Arsenal</div>
-    <h2 class="sec-title">Skills &amp; Tools</h2>
+<section id="about">
+  <div class="section-head reveal">
+    <div class="section-tag">01 · Profile</div>
+    <h2>About</h2>
   </div>
-  <div class="skills-grid">
-    <div class="sk" style="--lvl:90%" data-delay="0"><div class="sk-icon">🐍</div><div class="sk-cat">Core Language</div><div class="sk-name">Python</div><div class="sk-desc">Primary language for data analysis, automation &amp; machine learning</div><div class="sk-bar"><div class="sk-fill"></div></div></div>
-    <div class="sk" style="--lvl:85%" data-delay="1"><div class="sk-icon">🐼</div><div class="sk-cat">Data Analysis</div><div class="sk-name">Pandas &amp; NumPy</div><div class="sk-desc">Data cleaning, transformation, EDA &amp; numerical operations</div><div class="sk-bar"><div class="sk-fill"></div></div></div>
-    <div class="sk" style="--lvl:80%" data-delay="2"><div class="sk-icon">📊</div><div class="sk-cat">Visualization</div><div class="sk-name">Matplotlib</div><div class="sk-desc">Static charts, dashboards &amp; trend visualizations</div><div class="sk-bar"><div class="sk-fill"></div></div></div>
-    <div class="sk" style="--lvl:88%" data-delay="3"><div class="sk-icon">🧪</div><div class="sk-cat">Cheminformatics</div><div class="sk-name">RDKit</div><div class="sk-desc">Molecular descriptors, similarity metrics &amp; drug-likeness analysis</div><div class="sk-bar"><div class="sk-fill"></div></div></div>
-    <div class="sk" style="--lvl:65%" data-delay="4"><div class="sk-icon">🗄️</div><div class="sk-cat">Database</div><div class="sk-name">MySQL</div><div class="sk-desc">SQL queries, data retrieval &amp; database management (learning)</div><div class="sk-bar"><div class="sk-fill"></div></div></div>
-    <div class="sk" style="--lvl:78%" data-delay="5"><div class="sk-icon">🔧</div><div class="sk-cat">Dev Tools</div><div class="sk-name">Git &amp; GitHub</div><div class="sk-desc">Version control, project collaboration &amp; open source</div><div class="sk-bar"><div class="sk-fill"></div></div></div>
-    <div class="sk" style="--lvl:82%" data-delay="6"><div class="sk-icon">💻</div><div class="sk-cat">Environment</div><div class="sk-name">VS Code &amp; Colab</div><div class="sk-desc">Local development &amp; cloud-based notebook execution</div><div class="sk-bar"><div class="sk-fill"></div></div></div>
-    <div class="sk" style="--lvl:70%" data-delay="7"><div class="sk-icon">🤖</div><div class="sk-cat">Machine Learning</div><div class="sk-name">Scikit-Learn</div><div class="sk-desc">Predictive models, train/test splits &amp; performance metrics</div><div class="sk-bar"><div class="sk-fill"></div></div></div>
-  </div>
-</section>
-
-<!-- PROJECTS -->
-<section id="projects">
-  <div class="proj-inner">
-    <div class="sec-head">
-      <div class="sec-eye">Work &amp; Research</div>
-      <h2 class="sec-title">Projects</h2>
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p>M.Sc Chemistry student with a strong interest in <b>Chemoinformatics</b>, <b>Computational Chemistry</b>, and AI-driven Drug Discovery. Skilled in Python programming and cheminformatics tools like <b>RDKit</b> for molecular descriptor calculation, drug-likeness analysis, and molecular similarity studies.</p>
+      <p>Hands-on experience with molecular dataset analysis, visualization, and developing computational approaches for pharmaceutical research. Currently seeking opportunities in Chemoinformatics, Computational Chemistry, and AI-assisted Drug Discovery roles.</p>
     </div>
-    <div class="proj-grid">
-
-      <div class="pc" data-delay="0">
-        <div class="pc-glow"></div>
-        <div class="pc-num">01</div>
-        <div class="pc-tags"><span class="pctag">Python</span><span class="pctag">RDKit</span><span class="pctag">Pandas</span></div>
-        <h3 class="pc-title">Drug Discovery Data Analysis</h3>
-        <ul class="pc-list">
-          <li>Processed large chemical datasets using Pandas and RDKit</li>
-          <li>Generated molecular descriptors &amp; similarity metrics</li>
-          <li>Performed data cleaning to improve data quality</li>
-          <li>Created visualizations with Matplotlib to identify patterns</li>
-          <li>Worked with real-world datasets simulating industry problems</li>
-        </ul>
-        <a href="https://github.com/Dubakrishnamohan/drug-likeness-code" class="pc-link" target="_blank">View on GitHub →</a>
-      </div>
-
-      <div class="pc" data-delay="1">
-        <div class="pc-glow"></div>
-        <div class="pc-num">02</div>
-        <div class="pc-tags"><span class="pctag">Python</span><span class="pctag">Pandas</span><span class="pctag">NumPy</span></div>
-        <h3 class="pc-title">Data Analytics Project</h3>
-        <ul class="pc-list">
-          <li>Cleaned and transformed raw datasets end-to-end</li>
-          <li>Performed EDA to extract meaningful insights</li>
-          <li>Built visual dashboards to represent key trends</li>
-          <li>Identified correlations to support data-driven decisions</li>
-        </ul>
-      </div>
-
-      <div class="pc" data-delay="2">
-        <div class="pc-glow"></div>
-        <div class="pc-num">03</div>
-        <div class="pc-tags"><span class="pctag">Python</span><span class="pctag">Scikit-Learn</span><span class="pctag">ML</span></div>
-        <h3 class="pc-title">Machine Learning Project</h3>
-        <ul class="pc-list">
-          <li>Built ML models for classification &amp; prediction tasks</li>
-          <li>Prepared and split datasets for training and testing</li>
-          <li>Evaluated performance using accuracy &amp; multiple metrics</li>
-          <li>Applied ML concepts to solve real-world data problems</li>
-        </ul>
-      </div>
-
+    <div class="stat-panel reveal">
+      <div class="stat-row"><span class="label">Location</span><span class="value">Chodavaram, AP</span></div>
+      <div class="stat-row"><span class="label">Current</span><span class="value">M.Sc Chemistry</span></div>
+      <div class="stat-row"><span class="label">Institution</span><span class="value">Andhra University</span></div>
+      <div class="stat-row"><span class="label">Focus</span><span class="value">Cheminformatics · AI Drug Discovery</span></div>
+      <div class="stat-row"><span class="label">Core Tool</span><span class="value">RDKit + Python</span></div>
     </div>
   </div>
 </section>
 
-<!-- EDUCATION -->
 <section id="education">
-  <div class="sec-head">
-    <div class="sec-eye">Academic Background</div>
-    <h2 class="sec-title">Education</h2>
+  <div class="section-head reveal">
+    <div class="section-tag">02 · Pathway</div>
+    <h2>Education</h2>
   </div>
-  <div class="edu-tl">
-    <div class="ei" data-delay="0">
-      <div class="ei-dot"></div>
-      <div class="ei-yr">2025 – Present</div>
-      <div>
-        <div class="ei-deg">M.Sc. Chemistry</div>
-        <div class="ei-sch">Andhra University</div>
-        <div class="ei-loc">Visakhapatnam, India</div>
+  <div class="pathway reveal">
+    <div class="path-item">
+      <div class="path-year">2025 — Present</div>
+      <div class="path-body">
+        <h3>M.Sc. Chemistry</h3>
+        <div class="org">Andhra University</div>
+        <div class="meta">Visakhapatnam, India</div>
       </div>
     </div>
-    <div class="ei" data-delay="1">
-      <div class="ei-dot"></div>
-      <div class="ei-yr">2020 – 2023</div>
-      <div>
-        <div class="ei-deg">B.Sc. Microbiology &amp; Biotechnology</div>
-        <div class="ei-sch">Dr. Himasekhar Degree College, Anakapalli</div>
-        <div class="ei-loc">Anakapalli, India</div>
-        <div class="ei-grade">⭐ CGPA: 8.09</div>
-      </div>
-    </div>
-    <div class="ei" data-delay="2">
-      <div class="ei-dot"></div>
-      <div class="ei-yr">2017 – 2019</div>
-      <div>
-        <div class="ei-deg">12th — Bi.P.C.</div>
-        <div class="ei-sch">Sri Chaitanya Jr. College</div>
-        <div class="ei-loc">Vijayawada, India</div>
-        <div class="ei-grade">⭐ CGPA: 9.02</div>
-      </div>
-    </div>
-    <div class="ei" data-delay="3">
-      <div class="ei-dot"></div>
-      <div class="ei-yr">2016 – 2017</div>
-      <div>
-        <div class="ei-deg">10th Standard</div>
-        <div class="ei-sch">Ravindra Bharathi School</div>
-        <div class="ei-loc">Chodavaram, India</div>
-        <div class="ei-grade">⭐ CGPA: 8.7</div>
+    <div class="path-item">
+      <div class="path-year">2020 — 2023</div>
+      <div class="path-body">
+        <h3>B.Sc. Microbiology &amp; Biotechnology</h3>
+        <div class="org">Dr. Himasekhar Degree College, Anakapalli</div>
+        <div class="meta">CGPA 8.09 · Anakapalli, India</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- CONTACT -->
-<section id="contact">
-  <div class="contact-wrap">
-    <div class="sec-head">
-      <div class="sec-eye">Let's Connect</div>
-      <h2 class="sec-title">Get In Touch</h2>
+<section id="skills">
+  <div class="section-head reveal">
+    <div class="section-tag">03 · Elements</div>
+    <h2>Skills</h2>
+  </div>
+  <div class="periodic-grid reveal" id="periodicGrid"></div>
+  <div class="legend reveal">
+    <div class="legend-item"><span class="legend-dot" style="background:#5eead4"></span>Programming</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#8b7cf6"></span>Cheminformatics</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#f5a97f"></span>Computational Chemistry</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#f0d264"></span>Machine Learning</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#7fb7f0"></span>Tools</div>
+    <div class="legend-item"><span class="legend-dot" style="background:#f08fa2"></span>Chemistry Knowledge</div>
+  </div>
+</section>
+
+<section id="research">
+  <div class="section-head reveal">
+    <div class="section-tag">04 · Interests</div>
+    <h2>Research Interests</h2>
+  </div>
+  <div class="interest-list reveal">
+    <div class="interest-item"><span class="bond">::</span><p>AI-assisted drug discovery and virtual screening</p></div>
+    <div class="interest-item"><span class="bond">::</span><p>Chemoinformatics and computational chemistry</p></div>
+    <div class="interest-item"><span class="bond">::</span><p>Molecular modeling and drug-likeness analysis</p></div>
+    <div class="interest-item"><span class="bond">::</span><p>QSAR modeling and molecular property prediction</p></div>
+    <div class="interest-item"><span class="bond">::</span><p>Machine learning applications in pharmaceutical research</p></div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="section-head reveal">
+    <div class="section-tag">05 · Experiments</div>
+    <h2>Projects</h2>
+  </div>
+
+  <div class="project-card reveal">
+    <div class="project-top">
+      <h3>Drug Discovery &amp; Chemoinformatics Project</h3>
+      <span class="status done">Complete</span>
     </div>
-    <p class="contact-sub">Open to data analyst roles, internships &amp; research collaborations in data science or cheminformatics. Let's build something meaningful together.</p>
-    <div class="contact-grid">
-      <a href="mailto:dubamohan720@gmail.com" class="cl">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-        dubamohan720@gmail.com
-      </a>
-      <a href="tel:+919494297886" class="cl">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.15 12 19.79 19.79 0 0 1 1.08 3.38 2 2 0 0 1 3.05 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 8.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21 16z"/></svg>
-        +91 94942 97886
-      </a>
-      <a href="https://www.linkedin.com/in/duba-krishna-mohan-2681a924a" target="_blank" class="cl">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
-        LinkedIn
-      </a>
-      <a href="https://github.com/Dubakrishnamohan" target="_blank" class="cl">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-        GitHub
-      </a>
+    <div class="stack-row">
+      <span class="stack-tag">Python</span>
+      <span class="stack-tag">RDKit</span>
+      <span class="stack-tag">Matplotlib</span>
+    </div>
+    <ul>
+      <li>Processed molecular datasets using RDKit for cheminformatics analysis.</li>
+      <li>Generated molecular descriptors and analyzed molecular properties for drug-likeness evaluation.</li>
+      <li>Performed molecular similarity analysis to compare chemical compounds.</li>
+      <li>Created visualization plots to interpret molecular data patterns.</li>
+    </ul>
+    <a class="repo-link" href="https://github.com/Dubakrishnamohan/drug-likeness-code/tree/main" target="_blank" rel="noopener">↗ github.com/Dubakrishnamohan/drug-likeness-code</a>
+  </div>
+
+  <div class="project-card reveal">
+    <div class="project-top">
+      <h3>AI-Assisted Cancer Drug Discovery using Chemoinformatics</h3>
+      <span class="status active">Ongoing</span>
+    </div>
+    <div class="stack-row">
+      <span class="stack-tag">Python</span>
+      <span class="stack-tag">RDKit</span>
+      <span class="stack-tag">Machine Learning</span>
+    </div>
+    <ul>
+      <li>Working on computational screening of potential anticancer compounds using cheminformatics approaches.</li>
+      <li>Generating molecular descriptors and analyzing drug-like properties using RDKit.</li>
+      <li>Exploring machine learning approaches for molecular property prediction.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="certifications">
+  <div class="section-head reveal">
+    <div class="section-tag">06 · Credentials</div>
+    <h2>Certifications</h2>
+  </div>
+  <div class="cert-list reveal">
+    <div class="cert-item">
+      <span class="idx">01</span>
+      <div><div class="cert-name">AI-ML Virtual Internship</div><div class="cert-org">EduSkills · Supported by AWS Academy · 10 Weeks</div></div>
+      <span class="cert-year">2022</span>
+    </div>
+    <div class="cert-item">
+      <span class="idx">02</span>
+      <div><div class="cert-name">AWS Academy Cloud Foundations</div><div class="cert-org">AWS Academy Graduate</div></div>
+      <span class="cert-year">—</span>
+    </div>
+    <div class="cert-item">
+      <span class="idx">03</span>
+      <div><div class="cert-name">AWS Academy Machine Learning Foundations</div><div class="cert-org">AWS Academy Graduate</div></div>
+      <span class="cert-year">—</span>
     </div>
   </div>
 </section>
 
-<!-- FOOTER -->
-<footer>
-  <p>© 2025 <span class="fa">Krishna Mohan Duba</span></p>
-  <p>Chodavaram, Andhra Pradesh · <span class="fa">Data Analyst</span></p>
-</footer>
-
-<script src="script.js"></script>
-</body>
-</html>
+<section id="contact" class="contact-section">
+  <div class="section-head reveal" style="display:flex; flex-direction:column; align-items:center;">
+    <div class="section-tag">07 · Reach Out</div>
+    <h2>Let's build something.</h2>
+  </div>
+  <p class="reveal" style="color:var(--muted); max-width:520px; margin:0 auto;">Open to roles and collaborations in cheminformatics, computational chemistry, and AI-assisted drug discovery.</p>
+  <div class="contact-links reveal">
+    <a href="mailto:dubamohan720@gmail.com">✉ dubamohan
